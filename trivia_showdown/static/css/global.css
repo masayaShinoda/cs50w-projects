@@ -1,0 +1,10 @@
+@import "./utils.css";
+
+nav {
+    border-bottom: 1px solid #999;
+}
+
+::placeholder {
+    /* for firefox placeholders to be more visible */
+    opacity: 1 !important;
+}

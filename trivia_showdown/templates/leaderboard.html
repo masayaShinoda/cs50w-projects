@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}Leaderboard - Trivia Showdown{% endblock %}
+
+{% block body %}
+<main class="container is-max-desktop">
+    <section class="section">
+        <div class="block">
+            <h1 class="title">🏆 Leaderboard</h1>
+            <p>Get the most correct answers relative to incorrect answers to score higher on the leaderboard!</p>
+        </div>
+        <div class="block">
+            {% if leaderboard_content %}
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>
+                                <abbr title="Rank">
+                                    #
+                                </abbr>
+                            </th>
+                            <th>Username</th>
+                            <th>Total Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in leaderboard_content|dictsortreversed:"total_score" %}
+                            <tr class="{% if item.username == user.username %}has-background-grey-dark{% endif %}">
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <a href="{% url 'profile' item.username %}">
+                                        @{{ item.username }}
+                                    </a>
+                                </td>
+                                <td>{{ item.total_score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <section>
+                    <p>No leaderboard data available.</p>
+                </section>
+            {% endif %}
+        </div>
+        <div class="block">
+            <div class="pagination is-centered py-5" role="navigation" aria-label="navigation">
+                {% if leaderboard_content.has_previous %}
+                    <a class="pagination-previous" href="?page={{ leaderboard_content.previous_page_number }}">Previous</a>
+                {% endif %}
+                {% if leaderboard_content.has_next %}
+                    <a class="pagination-next" href="?page={{ leaderboard_content.next_page_number }}">Next</a>
+                {% endif %}
+                <ul class="pagination-list">
+                    {% for num in leaderboard_content.paginator.page_range %}
+                    <li>
+                        <a class="pagination-link{% if leaderboard_content.number == num %} is-current{% endif %}" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

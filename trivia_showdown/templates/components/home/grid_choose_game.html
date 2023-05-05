@@ -1,0 +1,26 @@
+<div class="columns is-multiline">
+    {% if categories %}
+        {% for category in categories|dictsort:"name" %}
+            <div class="column is-one-third">
+                <div class="card utils__card_equal_height">
+                    <div class="card-content">
+                        <div class="content">
+                            <!-- map to relevant emoji -->
+                            <span class="is-size-3">
+                                {% include "components/category-icon.html" %}
+                            </span>
+                            <h3 class="title is-size-4 my-3">{{ category.name }}</h3>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <p class="card-footer-item">
+                            <a data-action="category" href="{% url "quiz" category.slug %}" class="button is-primary is-fullwidth is-justify-content-center has-text-weight-semibold">
+                                Play
+                            </a>
+                        </p>
+                    </footer>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

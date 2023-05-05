@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Trivia Showdown{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/global.css' %}">
+        <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static '/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static '/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static '/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static '/site.webmanifest' %}">
+    </head>
+    <header>
+        {% include "components/navbar.html" %}
+    </header>
+    <body class="has-navbar-fixed-top">
+        {% block body %}
+        {% endblock %}
+
+        <!-- script to handle bulmaCSS components -->
+        <script defer src="{% static 'scripts/bulma_components.js' %}"></script>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}@{{ profile_user.username }} - Trivia Showdown{% endblock %}
+
+{% block body %}
+<div class="container is-max-desktop">
+    <section class="section">
+        <div class="box">
+            <h1 class="title">
+                <span class="has-text-grey is-size-4">@</span>{{ profile_user.username }}
+            </h1>
+            <div class="block">
+                {% if user_total_score %}
+                    <p class="is-size-4">
+                        Total score: <span class="has-text-weight-semibold">{{ user_total_score }}</span>
+                    </p>
+                {% else %}
+                    <p>Player has not completed a quiz yet.</p>
+                {% endif %}  
+            </div>
+            {% if user_all_answers.0.correct_answers_count or user_all_answers.0.incorrect_answers_count %}
+            <div class="block">
+                <p class="has-text-grey">The more correct answers relative to incorrect answers, the greater the total score.</p>
+            </div>
+            {% endif %}
+
+        </div>
+        {% if user_all_answers.0.all_answers_by_user %}
+        <div class="columns is-variable is-5 is-multiline">
+            {% regroup user_all_answers.0.all_answers_by_user by question_category as grouped_user_answers %}
+            {% for item in grouped_user_answers %}
+                <div class="column is-half px-5 py-5 is-flex-row">
+                    <h3 class="title is-size-5">{{ item.grouper.name }}</h3>
+                    {% regroup item.list by status as grouped_correct_incorrect %}
+                    <progress 
+                        id="progress-bar-{{ item.grouper.slug }}"
+                        data-category="{{ item.grouper.slug }}"
+                        data-reference="user_answer_progress_bar"
+                        class="progress is-info"
+                        value=""
+                        max=""
+                    >
+                    </progress>
+                    <div id="tags-{{ item.grouper.slug }}" class="tags are-medium">
+                        {% comment %} regroup into Correct and Incorrect answers {% endcomment %}
+                        {% for item in grouped_correct_incorrect %}
+                            <span class="tag is-light {% if item.grouper == "correct" %}is-success{% elif item.grouper == "incorrect" %}is-danger{% endif %}">
+                                <span>
+                                {% if item.grouper == "correct" %}Correct: {% elif item.grouper == "incorrect" %}Incorrect: {% endif %}
+                                </span>
+                                <span id="count-{{ item.grouper }}" class="ml-1 has-text-weight-semibold">{{ item.list|length }}</span>
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <script defer>
+                // javascript to update value and max attributes of the <progress> elements 
+                let progress_bars = document.querySelectorAll("[data-reference='user_answer_progress_bar']")
+                progress_bars.forEach(progress_bar => {
+                    let category = progress_bar.dataset.category
+                    // get numbers from relevent DOM elements
+                    let tags_container = document.getElementById(`tags-${category}`)
+                    
+                    let correct_answers_count = 0
+                    let incorrect_answers_count = 0
+
+                    if(tags_container.querySelector("#count-correct")) {
+                        correct_answers_count = Number(tags_container.querySelector("#count-correct").textContent.trim())
+                    }
+                    if(tags_container.querySelector("#count-incorrect")) {
+                        incorrect_answers_count = Number(tags_container.querySelector("#count-incorrect").textContent.trim())
+                    }
+
+                    // update the progress element attributes
+                    progress_bar.value = correct_answers_count
+                    progress_bar.max = correct_answers_count + incorrect_answers_count
+                })                
+            </script>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load static %}
+<section class="hero">
+    <div class="hero-body">
+        <h1 class="title">
+            {% if user %}
+                Welcome to {{ site_title }}, @{{ user }}.
+                {% else %}
+                Welcome to {{ site_title }}.
+            {% endif %}
+        </h1>
+        <p class="subtitle mt-3">
+            Quiz your way to the top of the leaderboard!
+        </p>
+        <div class="field is-grouped py-5">
+            <p class="control">
+                <button id="hero_btn_random" aria-label="Play a random category of questions" class="button is-primary">
+                    ▶️ Play Random
+                </button>
+            </p>
+            <p class="control">
+                <a href="{% url 'leaderboard' %}" aria-label="Leaderboard" class="button">
+                    🏆 Leaderboard
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+<script defer src="{% static "scripts/redirect_random_categ.js" %}"></script>

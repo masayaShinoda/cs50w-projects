@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} - Trivia Showdown{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+<main class="container is-max-desktop">
+    <section class="section">
+        <div class="block">
+            <a href="{% url 'index' %}" class="button is-light">
+                ← Back
+            </a>
+        </div>
+        {% include "components/messages.html" %}
+        <div class="block is-flex is-justify-content-space-between is-align-items-center">
+            <h1 id="quiz_category_title" class="title is-size-5 mb-0">
+                <span class="is-size-5">
+                    {% include "components/category-icon.html" %}
+                    {{ category.name }}
+                </span>
+            </h1>
+            <span id="countdown_tag" class="tag is-light is-size-5 has-text-weight-semibold" hidden></span>
+        </div>
+        <div id="quiz_area" class="block">
+            <div id="loading_placeholder">
+                <p class="is-size-5 mb-3">Just a sec...</p>
+                <progress class="progress is-small is-primary" max="100" style="max-width: min(50%, 320px)">15%</progress>
+            </div>
+            {% include "components/quiz/error_message_box.html" %}
+            <div id="quiz_container" class="block" hidden>
+                <div class="block">
+                    <h2 id="quiz_question" class="title"></h2>
+                </div>
+                <div class="block">
+                    <span id="quiz_difficulty" class="tag is-light is-medium"></span>
+                </div>
+                {% include "components/quiz/timeout_message_box.html" %}
+                <div class="block">
+                    <div id="quiz_options" class="quiz_choice_grid">
+                        <button id="quiz_opt_1" aria-label="Answer button" class="button is-medium"></button>
+                        <button id="quiz_opt_2" aria-label="Answer button" class="button is-medium"></button>
+                        <button id="quiz_opt_3" aria-label="Answer button" class="button is-medium"></button>
+                        <button id="quiz_opt_4" aria-label="Answer button" class="button is-medium"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="block mt-5 is-flex is-justify-content-space-between is-align-items-center">
+                <button id="btn_next_question" class="button is-link" aria-label="Next question">
+                    Next Question →
+                </button>
+                <span>
+                    <span id="quiz_page_current"></span>/<span id="quiz_page_max"></span>
+                </span>
+            </div>
+        </div>
+        <div id="quiz_result" hidden>
+            <div class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+                <div class="block my-5">
+                    <span class="has-text-centered mb-5">
+                        <span class="is-size-5 has-text-weight-semibold">                    
+                            {% include "components/category-icon.html" %}
+                            {{ category.name }}
+                        </span>                    
+                    </span>
+                    <h2 class="is-size-3 my-3 has-text-centered">Result:</h2>
+                    <p class="is-size-2 has-text-weight-semibold has-text-centered">
+                        <span id="quiz_result_score"></span>
+                        <span class="has-text-grey-light">/</span>
+                        <span id="quiz_result_score_max"></span>
+                    </p>
+                </div>
+                <div class="block buttons my-5">
+                    <a href="{% url "index" %}" aria-label="Back Home" class="button is-link is-outlined">← Back Home</a>
+                    <a href="{% url "quiz" category.slug %}" aria-label="Play Again" class="button is-link">▶️ Play Again</a>
+                    <a href="{% url "leaderboard" %}" aria-label="Leaderboard" class="button" >🏆 Leaderboard</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        // for use in quiz.js
+        let csrf_token = "{{ csrf_token }}"
+    </script>
+    <script id="quiz_script" src="{% static 'scripts/quiz.js' %}" defer data-category="{{ category_slug }}"></script>
+</main>
+{% endblock %}

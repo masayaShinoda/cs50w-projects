@@ -1,0 +1,18 @@
+{% if messages %}
+<div class="block mb-5">
+    <div class="messages">
+        {% for message in messages %}
+        <div class="
+            notification
+            {% if message.tags == "info" %} is-info{% endif %}
+            {% if message.tags == "success" %} is-success{% endif %}
+            {% if message.tags == "warning" %} is-warning{% endif %}
+            {% if message.tags == "error" %} is-danger{% endif %}
+        ">
+            <button class="delete"></button>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

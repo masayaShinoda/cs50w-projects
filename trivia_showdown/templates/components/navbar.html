@@ -1,0 +1,45 @@
+{% comment %} BulmaCSS Navbar {% endcomment %}
+<nav class="navbar utils__nav_mobile_no_padding_x is-fixed-top px-5" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand is-justify-content-space-between">
+        <a class="navbar-item" href="{% url 'index' %}">
+            {{ site_title }}
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="main-navbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div id="main-navbar" class="navbar-menu">
+        <div class="navbar-start">
+            <a href="{% url 'index' %}" class="navbar-item">
+                Home
+            </a>
+            <a href="{% url 'leaderboard' %}" class="navbar-item">
+                Leaderboard
+            </a>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    {% if user %}
+                        <a href="{% url 'profile' user.username %}" class="button is-ghost">
+                            @{{ user.username }}
+                        </a>
+                        <a href="{% url 'logout' %}" class="button is-link is-outlined">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="button is-link is-outlined">
+                            Log in
+                        </a>
+                        <a href="{% url 'register' %}" class="button is-ghost">
+                            Register
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
